@@ -9,6 +9,8 @@ const userRoute = require('./routes/userRoutes');
 app.use('/api/v1/tour', tourRoute);
 app.use('/api/v1/user', userRoute);
 
-app.listen(3000, () => {
-  console.log('Server is running');
-});
+module.exports = app;
+
+// app.listen(3000, () => {
+//   console.log('Server is running');
+// });
