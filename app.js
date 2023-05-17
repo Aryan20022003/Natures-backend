@@ -100,21 +100,35 @@ const addNewUser = (req, resp) => {
 // app.delete('/api/v1/tour/:id', deleteTourById);
 // app.post('/api/v1/tour', addNewTour);
 
-app
-  .route('/api/v1/tour/:id')
+// app
+//   .route('/api/v1/tour/:id')
+//   .get(getTour)
+//   .patch(updateTourById)
+//   .delete(deleteTourById);
+
+// app.route('/api/v1/tour').get(getAllTour).post(addNewTour);
+
+// app
+//   .route('/api/v1/user/:id')
+//   .get(getUser)
+//   .patch(getUserById)
+//   .delete(deleteUserById);
+
+// app.route('/api/v1/user').get(getAllUser).post(addNewUser);
+
+const tourRoute = express.Router();
+const userRoute = express.Router();
+tourRoute
+  .route('/:id')
   .get(getTour)
   .patch(updateTourById)
   .delete(deleteTourById);
-
-app.route('/api/v1/tour').get(getAllTour).post(addNewTour);
-
-app
-  .route('/api/v1/user/:id')
-  .get(getUser)
-  .patch(getUserById)
-  .delete(deleteUserById);
-
-app.route('/api/v1/user').get(getAllUser).post(addNewUser);
+tourRoute.route('/').get(getAllTour).post(addNewTour);
+userRoute.route('/:id').get(getUser).patch(getUserById).delete(deleteUserById);
+userRoute.route('/').get(getAllUser).post(addNewUser);
+//key word : route mounting just remember this and gpt
+app.use('/api/v1/tour', tourRoute);
+app.use('/api/v1/user', userRoute);
 
 app.listen(3000, () => {
   console.log('Server is running');
