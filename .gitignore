@@ -1,0 +1,26 @@
+# Environment variables
+.env
+
+# Node.js dependencies
+node_modules/
+
+# Build output directories (if applicable)
+dist/
+build/
+
+# IDE or editor specific files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+logs/
+*.log
+
+# Configuration files
+*.config.js
+
+# Operating System Files
+.DS_Store
+Thumbs.db
