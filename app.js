@@ -64,11 +64,19 @@ const addNewTour = (req, resp) => {
   );
 };
 
-app.get('/api/v1/tour/:id', getTourById); //define the dynamic route
-app.get('/api/v1/tour', getAllTour);
-app.patch('/api/v1/tour/:id', updateTourById);
-app.delete('/api/v1/tour/:id', deleteTourById);
-app.post('/api/v1/tour', addNewTour);
+// app.get('/api/v1/tour/:id', getTourById); //define the dynamic route
+// app.get('/api/v1/tour', getAllTour);
+// app.patch('/api/v1/tour/:id', updateTourById);
+// app.delete('/api/v1/tour/:id', deleteTourById);
+// app.post('/api/v1/tour', addNewTour);
+
+app
+  .route('/api/v1/tour/:id')
+  .get(getTourById)
+  .patch(updateTourById)
+  .delete(deleteTourById);
+
+app.route('/api/v1/tour').get(getAllTour).post(addNewTour);
 
 app.listen(3000, () => {
   console.log('Server is running');
