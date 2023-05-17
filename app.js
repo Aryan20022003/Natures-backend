@@ -16,7 +16,7 @@ const getAllTour = (req, resp) => {
   });
 };
 
-const getTourById = (req, resp) => {
+const getTour = (req, resp) => {
   console.log(req.params);
   resp.status(200).json({ req: req.params, date: Date.now() });
 };
@@ -64,7 +64,37 @@ const addNewTour = (req, resp) => {
   );
 };
 
-// app.get('/api/v1/tour/:id', getTourById); //define the dynamic route
+const getAllUser = (req, resp) => {
+  resp.status(500).json({
+    status: 'failed',
+    message: 'api route not implemented',
+  });
+};
+const getUserById = (req, resp) => {
+  resp.status(500).json({
+    status: 'failed',
+    message: 'api route not implemented',
+  });
+};
+const deleteUserById = (req, resp) => {
+  resp.status(500).json({
+    status: 'failed',
+    message: 'api route not implemented',
+  });
+};
+const getUser = (req, resp) => {
+  resp.status(500).json({
+    status: 'failed',
+    message: 'api route not implemented',
+  });
+};
+const addNewUser = (req, resp) => {
+  resp.status(500).json({
+    status: 'failed',
+    message: 'api route not implemented',
+  });
+};
+// app.get('/api/v1/tour/:id', getTour); //define the dynamic route
 // app.get('/api/v1/tour', getAllTour);
 // app.patch('/api/v1/tour/:id', updateTourById);
 // app.delete('/api/v1/tour/:id', deleteTourById);
@@ -72,11 +102,19 @@ const addNewTour = (req, resp) => {
 
 app
   .route('/api/v1/tour/:id')
-  .get(getTourById)
+  .get(getTour)
   .patch(updateTourById)
   .delete(deleteTourById);
 
 app.route('/api/v1/tour').get(getAllTour).post(addNewTour);
+
+app
+  .route('/api/v1/user/:id')
+  .get(getUser)
+  .patch(getUserById)
+  .delete(deleteUserById);
+
+app.route('/api/v1/user').get(getAllUser).post(addNewUser);
 
 app.listen(3000, () => {
   console.log('Server is running');
