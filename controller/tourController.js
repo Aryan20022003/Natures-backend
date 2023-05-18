@@ -3,6 +3,12 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
 );
 
+const checkData = (req, resp, next) => {
+  if (req.body.name == null || req.body.place == null) {
+    return resp.status(404).json({ status: 'failed', message: 'invalid data' });
+  }
+  next();
+};
 const getAllTour = (req, resp) => {
   resp.status(200).json({
     status: 'success',
@@ -69,4 +75,5 @@ module.exports = {
   updateTourById,
   deleteTourById,
   addNewTour,
+  checkData,
 };

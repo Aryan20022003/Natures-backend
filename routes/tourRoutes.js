@@ -11,6 +11,6 @@ router
 router
   .route('/')
   .get(tourController.getAllTour)
-  .post(tourController.addNewTour);
+  .post(tourController.checkData, tourController.addNewTour); //multiple middleware ,chaining of middleware
 
 module.exports = router;
