@@ -36,11 +36,10 @@ const getTour = async (req, resp) => {
 
 const updateTourById = async (req, resp) => {
   try {
-    const data = await Tour.findByIdAndUpdate(
-      req.params.id,
-      req.body ,
-      { new: true, runValidators: true }
-    );
+    const data = await Tour.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
     resp.status(200).json({
       status: 'success',
       data: req.body,
@@ -48,7 +47,7 @@ const updateTourById = async (req, resp) => {
   } catch (error) {
     resp.status(400).json({
       status: 'failed',
-      message: error,
+      message: error.message,
     });
   }
 };
@@ -80,7 +79,7 @@ const addNewTour = async (req, resp) => {
   } catch (error) {
     resp.status(400).json({
       status: 'failed',
-      error: req.body,
+      error: error.message,
     });
   }
 };
