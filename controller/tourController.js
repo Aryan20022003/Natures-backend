@@ -5,29 +5,44 @@ const getAllTour = async (req, resp) => {
   try {
     const { difficulty } = req.query;
     console.log({ difficulty });
-    //filtering the data as per need .
+    // Extract the 'difficulty' parameter from the query string
 
     let data = Tour.find({ difficulty });
-    //sort by
+    // Filter the data based on the 'difficulty' parameter
+
+    // Sorting
     if (req.query.sort) {
       console.log(req.query.sort);
-      // const sortBY=req.query.sort.split(',').join()
-      let sortBy=JSON.stringify(req.query.sort).split(',').join(' ');
-      sortBy=JSON.parse(sortBy);
-      data=data.sort(sortBy);
+      // Extract the 'sort' parameter from the query string
+
+      let sortBy = JSON.stringify(req.query.sort).split(',').join(' ');
+      // Convert the 'sort' parameter to a string, replace commas with spaces
+      // Example: "price,rating" => "price rating"
+
+      sortBy = JSON.parse(sortBy);
+      // Parse the string back to an object
+      // Example: "price rating" => { price: 1, rating: -1 }
+
+      data = data.sort(sortBy);
+      // Apply sorting based on the 'sortBy' object
     }
-    data=await data;
+
+    data = await data;
+    // Await the execution of the 'data' query
+
     resp.status(201).json({
       status: 'success',
       data: {
         tour: data,
       },
     });
+    // Send a JSON response with the sorted and filtered 'data'
   } catch (err) {
     resp.status(400).json({
       status: 'failed',
-      error:err.message,
+      error: err.message,
     });
+    // Handle any errors that occur during the process
   }
 };
 
