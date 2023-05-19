@@ -1,11 +1,22 @@
+const { json } = require('express');
 const Tour = require('./../model/tours');
 
 const getAllTour = async (req, resp) => {
   try {
     const { difficulty } = req.query;
-    console.log({difficulty });
+    console.log({ difficulty });
     //filtering the data as per need .
-    const data = await Tour.find({ difficulty });
+
+    let data = Tour.find({ difficulty });
+    //sort by
+    if (req.query.sort) {
+      console.log(req.query.sort);
+      // const sortBY=req.query.sort.split(',').join()
+      let sortBy=JSON.stringify(req.query.sort).split(',').join(' ');
+      sortBy=JSON.parse(sortBy);
+      data=data.sort(sortBy);
+    }
+    data=await data;
     resp.status(201).json({
       status: 'success',
       data: {
@@ -15,6 +26,7 @@ const getAllTour = async (req, resp) => {
   } catch (err) {
     resp.status(400).json({
       status: 'failed',
+      error:err.message,
     });
   }
 };
