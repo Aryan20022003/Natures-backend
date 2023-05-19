@@ -17,7 +17,6 @@ mongoose
     console.error('Error connecting to MongoDB:', error);
   });
 
-
 // const testTour = new Tour({
 //   name: 'Forest trek',
 //   rating: 4.7,

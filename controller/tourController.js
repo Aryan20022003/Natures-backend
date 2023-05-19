@@ -1,21 +1,10 @@
-const fs = require('fs');
-const tours = JSON.parse(
-  fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
-);
+const Tour = require('./../model/tours');
 
-const checkData = (req, resp, next) => {
-  if (req.body.name == null || req.body.place == null) {
-    return resp.status(404).json({ status: 'failed', message: 'invalid data' });
-  }
-  next();
-};
 const getAllTour = (req, resp) => {
   resp.status(200).json({
     status: 'success',
     date: Date.now(),
-    data: {
-      tours,
-    },
+    data: {},
   });
 };
 
@@ -44,29 +33,21 @@ const deleteTourById = (req, resp) => {
   });
 };
 
-const addNewTour = (req, resp) => {
-  const tours = JSON.parse(
-    fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
-  );
-
-  const id = tours[tours.length - 1].id + 1;
-  tours.push({ id, ...req.body });
-
-  fs.writeFile(
-    `${__dirname}/../dev-data/data/tours-simple.json`,
-    JSON.stringify(tours),
-    (error) => {
-      if (error) throw new Error('Error: File not saved');
-
-      resp.status(201).json({
-        status: 'success',
-        date: Date.now(),
-        data: {
-          tours: req.body,
-        },
-      });
-    }
-  );
+const addNewTour = async (req, resp) => {
+  try {
+    const data = await Tour.create(req.body);
+    resp.status(200).json({
+      status: 'success',
+      data: {
+        tour: req.boyd,
+      },
+    });
+  } catch (error) {
+    resp.status(400).json({
+      status: 'failed',
+      error: req.boyd,
+    });
+  }
 };
 
 module.exports = {
@@ -75,5 +56,4 @@ module.exports = {
   updateTourById,
   deleteTourById,
   addNewTour,
-  checkData,
 };
