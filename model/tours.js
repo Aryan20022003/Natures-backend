@@ -6,14 +6,35 @@ const tourSchema = new mongoose.Schema(
       type: String,
       require: [true, 'name must be there'],
       unique: true,
-    },
-    rating: {
-      type: Number,
-      default: 4,
+      trim: true,
     },
     price: {
       type: Number,
       require: [true, 'price must be there'],
+    },
+    duration: {
+      type: Number,
+      require: [true, 'duration must have duration'],
+    },
+    maxGroup: {
+      type: Number,
+      require: [true, 'max group must have size'],
+    },
+    summary: {
+      type: String,
+      trim: true,
+    },
+    ratingAverage: {
+      type: Number,
+      default: 4.5,
+    },
+    ratingQuantity: {
+      type: Number,
+      default: 0,
+    },
+    priceDiscount: {
+      type: Number,
+      default: 0,
     },
   },
   { collection: 'tours' }
@@ -22,4 +43,3 @@ const tourSchema = new mongoose.Schema(
 const Tour = mongoose.model('Tour', tourSchema);
 
 module.exports = Tour;
-

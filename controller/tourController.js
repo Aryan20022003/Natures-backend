@@ -38,7 +38,7 @@ const updateTourById = async (req, resp) => {
   try {
     const data = await Tour.findByIdAndUpdate(
       req.params.id,
-      { ...req.body },
+      req.body ,
       { new: true, runValidators: true }
     );
     resp.status(200).json({
