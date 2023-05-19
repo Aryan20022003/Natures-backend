@@ -1,36 +1,71 @@
 const Tour = require('./../model/tours');
 
-const getAllTour = (req, resp) => {
-  resp.status(200).json({
-    status: 'success',
-    date: Date.now(),
-    data: {},
-  });
+const getAllTour = async (req, resp) => {
+  try {
+    const data = await Tour.find();
+    resp.status(201).json({
+      status: 'success',
+      data: {
+        tour: data,
+      },
+    });
+  } catch (err) {
+    resp.status(400).json({
+      status: 'failed',
+    });
+  }
 };
 
-const getTour = (req, resp) => {
-  console.log(req.params);
-  resp.status(200).json({ req: req.params, date: Date.now() });
+const getTour = async (req, resp) => {
+  try {
+    const data = await Tour.findById(req.params.id);
+    resp.status(201).json({
+      status: 'success',
+      data: {
+        tour: data,
+      },
+    });
+  } catch (err) {
+    resp.status(400).json({
+      status: 'failed',
+      id: req.params.id,
+      error: err,
+    });
+  }
 };
 
-const updateTourById = (req, resp) => {
-  resp.status(201).json({
-    status: 'success',
-    date: Date.now(),
-    id: req.params.id,
-    data: {
-      tour: 'updated tour',
-    },
-  });
+const updateTourById = async (req, resp) => {
+  try {
+    const data = await Tour.findByIdAndUpdate(
+      req.params.id,
+      { ...req.body },
+      { new: true, runValidators: true }
+    );
+    resp.status(200).json({
+      status: 'success',
+      data: req.body,
+    });
+  } catch (error) {
+    resp.status(400).json({
+      status: 'failed',
+      message: error,
+    });
+  }
 };
 
-const deleteTourById = (req, resp) => {
-  resp.status(400).json({
-    status: 'success',
-    date: Date.now(),
-    id: req.params.id,
-    data: null,
-  });
+const deleteTourById = async (req, resp) => {
+  try {
+    await Tour.findByIdAndDelete(req.params.id);
+    resp.status(200).json({
+      status: 'successful',
+      data: null,
+    });
+  } catch (err) {
+    resp.status(400).json({
+      status: 'failed',
+      message: err.message,
+    });
+  }
 };
 
 const addNewTour = async (req, resp) => {
@@ -39,13 +74,13 @@ const addNewTour = async (req, resp) => {
     resp.status(200).json({
       status: 'success',
       data: {
-        tour: req.boyd,
+        tour: req.body,
       },
     });
   } catch (error) {
     resp.status(400).json({
       status: 'failed',
-      error: req.boyd,
+      error: req.body,
     });
   }
 };
