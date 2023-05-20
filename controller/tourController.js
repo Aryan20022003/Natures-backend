@@ -6,29 +6,27 @@ class API {
     this.query = query;
     this.queryString = queryString;
   }
+
   find() {
     const { difficulty } = this.queryString;
     console.log({ difficulty });
-    // Extract the 'difficulty' parameter from the query string
     if (difficulty) {
       this.query = this.query.find({ difficulty });
     }
     return this;
   }
+
   sorting() {
     if (this.queryString.sort) {
       console.log(this.queryString.sort);
-
       let sortBy = JSON.stringify(this.queryString.sort).split(',').join(' ');
-
       sortBy = JSON.parse(sortBy);
-
       this.query = this.query.sort(sortBy);
-      return this;
     }
+    return this;
   }
+
   fieldRequested() {
-    //3 returning only those field requested by user
     if (this.queryString.select) {
       console.log(this.queryString.select);
       let toSelect = this.queryString.select.split(',').join(' ');
@@ -38,16 +36,12 @@ class API {
     }
     return this;
   }
-  async paging() {
+
+  paging() {
     const page = this.queryString.page * 1 || 1;
     const limit = this.queryString.limit * 1 || 100;
-
-    data = data.limit(limit).skip((page - 1) * limit);
-
-    const totalDataCount = await this.query.countDocuments();
-    if ((page - 1) * limit >= totalDataCount) {
-      throw new Error('Invalid page number');
-    }
+    this.query = this.query.limit(limit).skip((page - 1) * limit);
+    return this;
   }
 }
 
@@ -101,14 +95,9 @@ const getAllTour = async (req, resp) => {
     //   throw new Error('Invalid page number');
     // }
 
-    const data = await( new API(Tour.find(), req.query)
-      .find()
-      .fieldRequested()
-      .paging()
-      .sorting()).query;
-    // data = await data;
-
-    // Await the execution of the 'data' query
+    // data = await data; just awating after building all the methods query .
+    const data = await new API(Tour.find(), req.query)
+      .find().fieldRequested().sorting().paging().query;
 
     resp.status(201).json({
       status: 'success',
