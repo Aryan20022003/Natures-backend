@@ -4,59 +4,89 @@ const tourSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      require: [true, 'name must be there'],
+      required: [true, 'Name must be provided.'],
       unique: true,
       trim: true,
     },
     price: {
       type: Number,
-      require: [true, 'price must be there'],
+      required: [true, 'Price must be provided.'],
     },
     description: {
       type: String,
-      require: [true, 'duration must have duration'],
+      required: [true, 'Description must be provided.'],
     },
     maxGroupSize: {
       type: Number,
-      require: [true, 'max group must have size'],
+      required: [true, 'Max group size must be provided.'],
     },
     summary: {
       type: String,
       trim: true,
-      require:[true,'must has summary']
+      required: [true, 'Summary must be provided.'],
     },
     ratingsAverage: {
       type: Number,
       default: 4.5,
+      min: [0, 'Ratings average cannot be negative.'],
+      max: [5, 'Ratings average cannot be greater than 5.'],
     },
     ratingsQuantity: {
       type: Number,
       default: 0,
+      min: [0, 'Ratings quantity cannot be negative.'],
     },
     priceDiscount: {
       type: Number,
       default: 0,
+      min: [0, 'Price discount cannot be negative.'],
     },
-    difficulty:
-    {
-        type:String,
+    difficulty: {
+      type: String,
+      enum: {
+        values: ['easy', 'medium', 'difficult'],
+        message: 'Difficulty must be either easy, medium, or difficult.',
+      },
     },
-    imageCover:
-    {
-        type:String,
-        require:[true,"must have image Cover"]
+    imageCover: {
+      type: String,
+      required: [true, 'Image cover must be provided.'],
     },
-    images:[String],
-    createdAt:
-    {
-        type:Date,
-        default:Date.now()
+    images: [String],
+    createdAt: {
+      type: Date,
+      default: Date.now,
     },
-    startDates:[Date]
+    startDates: [Date],
   },
   { collection: 'tours' }
 );
 
 const Tour = mongoose.model('Tour', tourSchema);
+
+//document middleWare
+tourSchema.pre('save', function (next) {
+  console.log('before saving');
+  next();
+});
+
+tourSchema.post('save', function (doc, next) {
+  console.log(doc);
+  next();
+});
+
+//query middleware
+
+tourSchema.pre('find', function (next) {
+  //this point to query.
+  this.time = Time();
+  console.log('triggered before find ');
+  next();
+});
+
+tourSchema.post('find', function (doc, next) {
+  console.log(Time() - doc.time);
+  next();
+});
 
 module.exports = Tour;
