@@ -16,7 +16,7 @@ mongoose
   .catch((error) => {
     console.error('Error connecting to MongoDB:', error.message);
   });
- 
+
 // const testTour = new Tour({
 //   name: 'Forest trek',
 //   rating: 4.7,

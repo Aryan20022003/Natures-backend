@@ -1,8 +1,7 @@
 const { json } = require('express');
 const Tour = require('./../model/tours');
 const API = require('./../utility/apiFeatures');
-
-const getAllTour = async (req, resp,next) => {
+const getAllTour = async (req, resp, next) => {
   try {
     // const { difficulty } = req.query;
     // console.log({ difficulty });
@@ -64,9 +63,9 @@ const getAllTour = async (req, resp,next) => {
         tour: data,
       },
     });
-  } catch (err) {
-    err.status=404;
-    next(err);
+  } catch (error) {
+    error.status = 404;
+    next(error);
     // resp.status(400).json({
     //   status: 'failed',
     //   error: err.message,
@@ -75,7 +74,7 @@ const getAllTour = async (req, resp,next) => {
   }
 };
 
-const getTour = async (req, resp,next) => {
+const getTour = async (req, resp, next) => {
   try {
     const data = await Tour.findById(req.params.id);
     resp.status(201).json({
@@ -84,9 +83,9 @@ const getTour = async (req, resp,next) => {
         tour: data,
       },
     });
-  } catch (err) {
-    err.status=404;
-    next(err);
+  } catch (error) {
+    error.status = 404;
+    next(error);
     // resp.status(400).json({
     //   status: 'failed',
     //   id: req.params.id,
@@ -95,7 +94,7 @@ const getTour = async (req, resp,next) => {
   }
 };
 
-const updateTourById = async (req, resp,next) => {
+const updateTourById = async (req, resp, next) => {
   try {
     const data = await Tour.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -106,8 +105,8 @@ const updateTourById = async (req, resp,next) => {
       data: req.body,
     });
   } catch (error) {
-    err.status=404;
-    next(err);
+    error.status = 404;
+    next(error);
     // resp.status(400).json({
     //   status: 'failed',
     //   message: error.message,
@@ -115,7 +114,7 @@ const updateTourById = async (req, resp,next) => {
   }
 };
 
-const deleteTourById = async (req, resp,next) => {
+const deleteTourById = async (req, resp, next) => {
   try {
     await Tour.findByIdAndDelete(req.params.id);
     resp.status(200).json({
@@ -123,7 +122,7 @@ const deleteTourById = async (req, resp,next) => {
       data: null,
     });
   } catch (err) {
-    err.status=404;
+    err.status = 404;
     next(err);
     // resp.status(400).json({
     //   status: 'failed',
@@ -132,7 +131,7 @@ const deleteTourById = async (req, resp,next) => {
   }
 };
 
-const addNewTour = async (req, resp,next) => {
+const addNewTour = async (req, resp, next) => {
   try {
     const data = await Tour.create(req.body);
     resp.status(200).json({
@@ -142,8 +141,8 @@ const addNewTour = async (req, resp,next) => {
       },
     });
   } catch (error) {
-    err.status=404;
-    next(err);
+    error.status = 404;
+    next(error);
     // resp.status(400).json({
     //   status: 'failed',
     //   error: error.message,
@@ -151,7 +150,7 @@ const addNewTour = async (req, resp,next) => {
   }
 };
 
-const aggregate = async (req, resp,next) => {
+const aggregate = async (req, resp, next) => {
   try {
     const data = await Tour.aggregate([
       { $match: { ratingsAverage: { $gt: 4 } } },
@@ -180,8 +179,8 @@ const aggregate = async (req, resp,next) => {
       },
     });
   } catch (error) {
-    err.status=404;
-    next(err);
+    error.status = 404;
+    next(error);
     // resp.status(400).json({
     //   status: 'failed',
     //   error: error.message,
@@ -189,7 +188,7 @@ const aggregate = async (req, resp,next) => {
   }
 };
 
-const unwind = async (req, resp,next) => {
+const unwind = async (req, resp, next) => {
   const data = await Tour.aggregate([
     { $unwind: '$startDates' },
     {
@@ -223,8 +222,8 @@ const unwind = async (req, resp,next) => {
       },
     });
   } catch (error) {
-    err.status=404;
-    next(err);
+    error.status = 404;
+    next(error);
     // resp.status(400).json({
     //   status: 'failed',
     //   error: error.message,

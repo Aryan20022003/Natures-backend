@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const tourController = require('../controller/tourController');
+const authController = require('./../controller/authController');
 
 router.route(`/get-status`).get(tourController.aggregate);
 router.route('/get-unwind').get(tourController.unwind);
@@ -12,7 +13,7 @@ router
 
 router
   .route('/')
-  .get(tourController.getAllTour)
+  .get(authController.tokenVerification, tourController.getAllTour)
   .post(tourController.addNewTour); //multiple middleware ,chaining of middleware
 
 module.exports = router;
