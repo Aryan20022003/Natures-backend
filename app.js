@@ -1,9 +1,33 @@
 const express = require('express');
+const rateLimit = require('express-rate-limit');
 const app = express();
-app.use(express.json());
-
 const tourRoute = require('./routes/tourRoutes');
 const userRoute = require('./routes/userRoutes');
+const mongoSanitize = require('express-mongo-sanitize');
+const { xss } = require('express-xss-sanitizer');
+const hpp = require('hpp');
+//http security header
+const helmet = require('helmet');
+app.use(helmet());
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  message: 'Too many requests, please try again later.',
+});
+app.use(limiter);
+
+//adding body.
+app.use(express.json('10kb'));
+
+//mongooes sanantization
+app.use(mongoSanitize());
+
+//xss sanitization cross site attack
+app.use(xss());
+
+//removing parameter pollution
+app.use(hpp());
 
 //key-word :route mounting gpt
 app.use('/api/v1/tour', tourRoute);
