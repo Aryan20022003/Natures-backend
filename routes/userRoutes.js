@@ -8,9 +8,16 @@ router.post('/signIn', authController.signIn);
 
 router
   .route('/:id')
-  .get(userController.getUser)
-  .patch(userController.getUserById)
-  .delete(userController.deleteUserById);
+  .get(authController.tokenVerification, userController.getUser)
+  .patch(
+    authController.tokenVerification,
+    userController.updateUserById
+  )
+  .delete(
+    authController.tokenVerification,
+    authController.restrictTo(['admin']),
+    userController.deleteUserById
+  );
 
 router
   .route('/')

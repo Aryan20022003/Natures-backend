@@ -21,6 +21,7 @@ const signUp = async (req, resp, next) => {
       email: req.body.email,
       password: req.body.password,
       passwordConfirmation: req.body.passwordConfirmation,
+      role: req.body.role,
     });
 
     resp.status(201).json({
@@ -50,7 +51,8 @@ const signIn = async (req, resp, next) => {
     ) {
       throw new Error('invalid user || password');
     }
-    resp.status(200).json({ token: generateToken(userData._id) });
+    const token = generateToken(userData._id);
+    resp.status(200).json({ token });
   } catch (error) {
     error.status = 500;
     next(error);
@@ -66,14 +68,18 @@ const tokenVerification = async (req, res, next) => {
       const decoded = await util.promisify(JWT.verify)(
         authenticToken,
         process.env.jwtSecret
-      );
+        );
+      if (req.params.id != null) {
+        if (req.param.id != decoded.id)
+          throw new Error('invalid user X request');
+      }
       // console.log(decoded);
       // Check if the user still exists in the database
-      const newUser = await User.findById(decoded.id);
+      const newUser = await User.findById(decoded.id).select('+password');
+      console.log(newUser);
       if (!newUser) {
         throw new Error('User no longer exists');
       }
-
       // Check if the user has changed their password after the token was issued
       if (newUser.changedPasswordAfter(decoded.iat)) {
         throw new Error('Please revalidate your credentials');
@@ -90,4 +96,15 @@ const tokenVerification = async (req, res, next) => {
   }
 };
 
-module.exports = { signUp, signIn, tokenVerification };
+const restrictTo = function (...allowedRoles) {
+  return (req, resp, next) => {
+    const role = req.user.role;
+    if (!allowedRoles.includes(role)) {
+      const error = new Error('access denied');
+      error.status = 403;
+      return next(error);
+    }
+    return next();
+  };
+};
+module.exports = { signUp, signIn, tokenVerification, restrictTo };

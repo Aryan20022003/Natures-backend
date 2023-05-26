@@ -7,13 +7,13 @@ router.route(`/get-status`).get(tourController.aggregate);
 router.route('/get-unwind').get(tourController.unwind);
 router
   .route('/:id')
-  .get(tourController.getTour)
-  .patch(tourController.updateTourById)
-  .delete(tourController.deleteTourById);
+  .get(authController.tokenVerification, tourController.getTour)
+  .patch(authController.tokenVerification, tourController.updateTourById)
+  .delete(authController.tokenVerification, tourController.deleteTourById);
 
 router
   .route('/')
   .get(authController.tokenVerification, tourController.getAllTour)
-  .post(tourController.addNewTour); //multiple middleware ,chaining of middleware
+  .post(authController.tokenVerification, tourController.addNewTour); //multiple middleware ,chaining of middleware
 
 module.exports = router;
